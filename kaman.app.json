@@ -1,0 +1,65 @@
+{
+  "name": "Multilingual Service Line",
+  "agents": {
+    "service_desk": "d2cb8c43-fd61-5107-abb8-a4d448c975fe",
+    "voice": "d4a5529d-a5a8-5b04-ab7f-9e1f2f18e723"
+  },
+  "workflows": {
+    "cb_flow": "ca06d3a0-0c2b-5bdb-8f5e-1840c3c319fe"
+  },
+  "ui": {
+    "title": "Multilingual Service Line",
+    "tagline": "A voice agent for your service line that answers in the caller's language, finds their account, checks known outages, logs requests, and - through an attached wrap-up workflow - books a human callback in the right language when one is needed.",
+    "actions": [
+      {
+        "id": "run",
+        "label": "Run: Service call wrap-up",
+        "description": "Run by the service line agent at the end of a call. Kaman summarises the call, decides whether it needs a human callback, books it with the right priority and language, and records the outcome.",
+        "kind": "workflow",
+        "target": "cb_flow",
+        "inputs": [
+          {
+            "name": "transcript",
+            "label": "Transcript",
+            "kind": "text",
+            "default": "Caller (Hindi): My water connection has had no supply since yesterday... Agent: I have logged it... Caller: Please have someone call me, my father is unwell."
+          },
+          {
+            "name": "caller",
+            "label": "Caller",
+            "kind": "text",
+            "default": "+91-90000-00000"
+          },
+          {
+            "name": "language",
+            "label": "Language",
+            "kind": "text",
+            "default": "hi"
+          },
+          {
+            "name": "account",
+            "label": "Account",
+            "kind": "text",
+            "default": "WC-104422"
+          }
+        ]
+      },
+      {
+        "id": "ask",
+        "label": "Ask the Service Desk Agent",
+        "description": "Logs service requests and books callbacks as Zendesk tickets.",
+        "kind": "agent",
+        "target": "service_desk",
+        "prompt": "{{question}}",
+        "inputs": [
+          {
+            "name": "question",
+            "label": "Your question",
+            "kind": "text",
+            "default": "Task: Book an urgent callback in Hindi for +91-90000-00000."
+          }
+        ]
+      }
+    ]
+  }
+}
